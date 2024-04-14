@@ -1,0 +1,50 @@
+<div class="h-screen flex items-center justify-center bg-slate-700">
+  <form [formGroup]="form" (ngSubmit)="signUp($event)" class="form-wrapper shadow-md rounded-md m-5 p-5 bg-white">
+    <div class="py-4">
+      <h1 class="font-bold text-left py-2">Sign up</h1>
+    </div>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Username</mat-label>
+      <input matInput placeholder="Username" formControlName="username" />
+      <mat-icon matPrefix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Password</mat-label>
+      <input [type]="hidePassword ? 'password' : 'text'" matInput placeholder="Password" formControlName="password" />
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon (click)="hidePassword = !hidePassword" matSuffix>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Confirm password</mat-label>
+      <input [type]="hideConfirmPassword ? 'password' : 'text'" matInput placeholder="Password" formControlName="confirmPassword" />
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon (click)="hideConfirmPassword = !hideConfirmPassword" matSuffix>{{
+        hideConfirmPassword ? 'visibility_off' : 'visibility'
+      }}</mat-icon>
+    </mat-form-field>
+
+    @if (form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.touched && form.hasError('passwordMismatch')) {
+      <div class="text-red-700 mb-5">Password do not match</div>
+    }
+
+    <button
+      [disabled]="!form.valid"
+      type="submit"
+      class="w-full border border-slate-200 rounded-md disabled:bg-purple-400 py-2 px-3 bg-purple-700 text-white font-bold"
+    >
+      Sign up
+    </button>
+
+    @if (processingRequestError | async; as error) {
+      <div class="error">{{ error }}</div>
+    }
+
+    <div class="my-5">
+      <span class="text-slate-600">Already have an account?</span>
+      <a class="ml-1 text-purple-700" routerLink="/login">Login</a>
+    </div>
+  </form>
+</div>

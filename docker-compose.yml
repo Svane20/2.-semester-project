@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  angular-client:
+    container_name: angular-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - nestjs-api
+
+  nestjs-api:
+    container_name: nestjs-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MYSQL_HOST=mysql
+      - JWT_SECRET=my_secret
+      - NODE_ENV=production
+      - MQTT_USERNAME=ks
+      - MQTT_PASSWORD=Duller12
+      - PC_IP=http://192.168.234.202
+    depends_on:
+      - mysql
+      - mosquitto
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    ports:
+      - "8883:8883"
+    volumes:
+      - ./mqtt:/mosquitto/config
+
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root_password
+      MYSQL_USER: admin_user
+      MYSQL_PASSWORD: admin_password
+      MYSQL_DATABASE: users
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

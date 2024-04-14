@@ -1,0 +1,11 @@
+.wrapper {
+  height: 93vh;
+
+  @media only screen and (max-width: 600px) {
+    height: 93.8vh;
+  }
+}
+
+.unlock-btn {
+  margin-left: 8.5rem;
+}

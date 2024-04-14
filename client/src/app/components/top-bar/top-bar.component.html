@@ -1,0 +1,28 @@
+<div>
+  <mat-toolbar style="padding: 10px 30px">
+    <a routerLink="/">Smart Lock Door</a>
+    <div class="w-full"></div>
+
+    @if (isLoggedIn()) {
+      <div *ngIf="authService.getUserDetails() as details" class="flex gap-5 items-center">
+        <a [matMenuTriggerFor]="menu" class="flex gap-2 cursor-pointer items-center">
+          <div class="bg-red-400 text-white font-bold shadow-md rounded-full w-5 h-5 p-5 flex justify-center items-center">
+            {{ details?.username | uppercase }}
+          </div>
+        </a>
+        <mat-menu #menu="matMenu">
+          <button (click)="logout()" mat-menu-item>
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    } @else {
+      <div>
+        <div class="flex gap-5 items-center">
+          <a routerLink="/login">Login</a>
+        </div>
+      </div>
+    }
+  </mat-toolbar>
+</div>

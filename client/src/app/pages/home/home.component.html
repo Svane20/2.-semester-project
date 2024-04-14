@@ -1,0 +1,24 @@
+<div class="wrapper flex justify-center items-center bg-slate-800">
+  @if (healthStatus | async; as status) {
+    <div class="status-box shadow-lg max-w-md w-full bg-slate-700 rounded-lg pl-2 pr-8 pt-8 pb-8">
+      <h1 class="text-xl text-center font-bold mt-4 text-white">Health Status: {{ status.value | titlecase }}</h1>
+      <h1 class="text-xl text-center font-bold mt-4 pl-20 text-white">Last Update: {{ status.lastUpdate | timeAgo }} seconds ago</h1>
+      <h1 class="text-xl text-center font-bold mt-4 text-white">Lock Status: {{ (lockStatus | async)?.value | titlecase }}</h1>
+
+      @if (isLoggedIn() && lockStatus | async; as lock) {
+        <button
+          mat-raised-button
+          class="unlock-btn flex items-center justify-center p-2 h-auto"
+          [disabled]="lock.value === 'unlocked'"
+          [color]="lock.value === 'locked' ? 'primary' : 'accent'"
+          (click)="unlockDoor($event)"
+        >
+          <mat-icon>{{ lock.value === 'locked' ? 'lock' : 'lock_open' }}</mat-icon>
+          <span>{{ lock.value === 'locked' ? 'Unlock door' : 'Door unlocked' }}</span>
+        </button>
+      }
+    </div>
+  } @else {
+    <h1 class="text-2xl text-center font-bold mb-4 text-white">Loading...</h1>
+  }
+</div>
